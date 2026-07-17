@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>襄阳市浩思凯嘉电子科技有限公司 - 电子科技·智驱未来</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            background: #05060a;
+            color: #d0d0e0;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #05060a; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+            border-radius: 3px;
+        }
+
+        /* ========== 导航栏 ========== */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            padding: 18px 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.4s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(5, 6, 10, 0.92);
+            backdrop-filter: blur(20px);
+            padding: 12px 80px;
+            box-shadow: 0 4px 30px rgba(59, 130, 246, 0.08);
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none;
+        }
+        .nav-logo .logo-icon {
+            width: 44px; height: 44px;
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        /* 电路芯片Logo */
+        .chip-logo {
+            position: relative;
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.15));
+            border: 2px solid rgba(59, 130, 246, 0.5);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            animation: chipPulse 2.5s ease-in-out infinite;
+        }
+        .chip-logo .chip-core {
+            width: 14px; height: 14px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 3px;
+        }
+        .chip-logo .chip-pin {
+            position: absolute;
+            background: rgba(59, 130, 246, 0.6);
+        }
+        .chip-logo .chip-pin.top { top: -4px; left: 50%; width: 2px; height: 6px; transform: translateX(-50%); }
+        .chip-logo .chip-pin.bottom { bottom: -4px; left: 50%; width: 2px; height: 6px; transform: translateX(-50%); }
+        .chip-logo .chip-pin.left { left: -4px; top: 50%; width: 6px; height: 2px; transform: translateY(-50%); }
+        .chip-logo .chip-pin.right { right: -4px; top: 50%; width: 6px; height: 2px; transform: translateY(-50%); }
+        .nav-logo .logo-glow {
+            position: absolute;
+            width: 52px; height: 52px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+            animation: logoGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes chipPulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 30px rgba(139, 92, 246, 0.2); }
+        }
+        @keyframes logoGlow {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.4); opacity: 0.15; }
+        }
+
+        .nav-logo .logo-text {
+            font-size: 20px; font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #818cf8, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex; gap: 36px; align-items: center;
+            list-style: none;
+        }
+        .nav-links a {
+            color: #b0b8d0; text-decoration: none;
+            font-size: 14px; font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative; padding: 4px 0;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: #818cf8; }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* ========== Hero ========== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            padding: 120px 80px 80px;
+        }
+
+        /* 电路板网格背景 */
+        .circuit-bg {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; opacity: 0.07;
+        }
+
+        /* 电子粒子 */
+        .hero-particles {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: #3b82f6;
+            border-radius: 50%;
+            animation: electronOrbit linear infinite;
+            box-shadow: 0 0 6px #3b82f6, 0 0 12px rgba(59, 130, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        @keyframes electronOrbit {
+            0% {
+                transform: translate(-50vw, -30vh) scale(0);
+                opacity: 0;
+            }
+            5% { opacity: 1; }
+            25% { transform: translate(30vw, 10vh) scale(1); }
+            50% { transform: translate(50vw, -20vh) scale(0.8); }
+            75% { transform: translate(-20vw, 20vh) scale(1.2); }
+            95% { opacity: 1; }
+            100% {
+                transform: translate(60vw, 50vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 数字脉冲环 */
+        .pulse-rings {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        .pulse-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            animation: ringExpand 3s ease-out infinite;
+        }
+        .pulse-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+        .pulse-ring:nth-child(2) { width: 200px; height: 200px; animation-delay: 1s; }
+        .pulse-ring:nth-child(3) { width: 200px; height: 200px; animation-delay: 2s; }
+        @keyframes ringExpand {
+            0% { width: 200px; height: 200px; opacity: 0.6; }
+            100% { width: 800px; height: 800px; opacity: 0; }
+        }
+
+        .hero-content {
+            position: relative; z-index: 2;
+            text-align: center; max-width: 900px;
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 30px;
+            font-size: 13px; color: #818cf8;
+            letter-spacing: 4px; margin-bottom: 32px;
+            animation: badgeGlow 2.5s ease-in-out infinite;
+            background: rgba(59, 130, 246, 0.05);
+        }
+        @keyframes badgeGlow {
+            0%, 100% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 10px rgba(59, 130, 246, 0); }
+            50% { border-color: rgba(59, 130, 246, 0.6); box-shadow: 0 0 24px rgba(59, 130, 246, 0.18); }
+        }
+        .hero-title {
+            font-size: 56px; font-weight: 800;
+            line-height: 1.3; margin-bottom: 24px;
+            letter-spacing: 3px;
+        }
+        .hero-title .blue {
+            background: linear-gradient(135deg, #3b82f6, #818cf8, #8b5cf6, #3b82f6);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: blueShimmer 3.5s ease infinite;
+        }
+        .hero-title .white { color: #ffffff; }
+        @keyframes blueShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .hero-subtitle {
+            font-size: 18px; color: #9098b0;
+            margin-bottom: 48px; letter-spacing: 2px;
+            line-height: 1.8;
+        }
+        .hero-btns {
+            display: flex; gap: 20px;
+            justify-content: center; flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+        .btn-primary {
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: #fff;
+            border: none; border-radius: 8px;
+            font-size: 15px; font-weight: 600;
+            cursor: pointer; letter-spacing: 2px;
+            transition: all 0.3s ease;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+        .btn-outline {
+            padding: 14px 40px;
+            background: transparent;
+            color: #818cf8;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 8px;
+            font-size: 15px; font-weight: 600;
+            cursor: pointer; letter-spacing: 2px;
+            transition: all 0.3s ease;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-outline:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+        }
+
+        .hero-stats {
+            display: flex; gap: 60px;
+            justify-content: center; flex-wrap: wrap;
+        }
+        .hero-stat { text-align: center; }
+        .hero-stat .number {
+            font-size: 36px; font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block; line-height: 1;
+        }
+        .hero-stat .label {
+            font-size: 13px; color: #788898;
+            margin-top: 8px; letter-spacing: 1px;
+        }
+
+        /* ========== 通用Section ========== */
+        section {
+            padding: 100px 80px; position: relative;
+        }
+        .section-title {
+            text-align: center; margin-bottom: 64px;
+        }
+        .section-title .sub {
+            font-size: 13px; color: #818cf8;
+            letter-spacing: 4px; margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .section-title h2 {
+            font-size: 38px; font-weight: 800;
+            color: #fff; letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+        .section-title .line {
+            width: 60px; height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            margin: 0 auto; border-radius: 2px;
+        }
+
+        /* ========== 服务领域 ========== */
+        .services { background: #06080e; }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px; max-width: 1200px; margin: 0 auto;
+        }
+        .service-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            border-radius: 16px;
+            padding: 36px 28px;
+            transition: all 0.4s ease;
+            position: relative; overflow: hidden;
+            cursor: pointer;
+        }
+        .service-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent);
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        .service-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .service-card:hover::before { opacity: 1; }
+        .service-icon {
+            width: 56px; height: 56px; border-radius: 14px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1));
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px; font-size: 26px;
+            transition: all 0.3s ease;
+        }
+        .service-card:hover .service-icon {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(139, 92, 246, 0.18));
+            transform: scale(1.05);
+        }
+        .service-card h3 {
+            font-size: 18px; font-weight: 700;
+            color: #fff; margin-bottom: 12px; letter-spacing: 1px;
+        }
+        .service-card p {
+            font-size: 14px; color: #7888a0; line-height: 1.8;
+        }
+
+        /* ========== 产品中心 ========== */
+        .products { background: #05060a; }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px; max-width: 1200px; margin: 0 auto;
+        }
+        .product-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+            transition: all 0.4s ease;
+            position: relative; overflow: hidden;
+            cursor: pointer;
+            display: flex; gap: 28px; align-items: flex-start;
+        }
+        .product-card:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .product-card .prod-icon {
+            width: 64px; height: 64px; min-width: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.1));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px;
+        }
+        .product-card h3 {
+            font-size: 20px; font-weight: 700;
+            color: #fff; margin-bottom: 8px; letter-spacing: 1px;
+        }
+        .product-card p {
+            font-size: 14px; color: #7888a0; line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .product-card .tag {
+            display: inline-block;
+            padding: 4px 14px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            font-size: 12px; color: #818cf8;
+            letter-spacing: 1px;
+        }
+
+        /* ========== 关于我们 ========== */
+        .about { background: #06080e; }
+        .about-content {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 60px; align-items: center;
+        }
+        .about-text h3 {
+            font-size: 28px; font-weight: 800;
+            color: #fff; margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+        .about-text p {
+            font-size: 15px; color: #9098b0;
+            line-height: 2; margin-bottom: 32px;
+        }
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        .about-feature {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.08);
+            transition: all 0.3s ease;
+        }
+        .about-feature:hover {
+            border-color: rgba(59, 130, 246, 0.25);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .about-feature .feat-icon { font-size: 28px; margin-bottom: 10px; }
+        .about-feature h4 {
+            font-size: 15px; color: #fff;
+            margin-bottom: 6px; letter-spacing: 1px;
+        }
+        .about-feature p {
+            font-size: 13px; color: #6878a0;
+            margin-bottom: 0; line-height: 1.6;
+        }
+
+        /* 芯片视觉 */
+        .about-visual {
+            display: flex; align-items: center;
+            justify-content: center; position: relative;
+        }
+        .chip-visual {
+            position: relative;
+            width: 220px; height: 220px;
+        }
+        .chip-outer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            animation: chipRotate 8s linear infinite;
+        }
+        .chip-inner {
+            position: absolute;
+            top: 25px; left: 25px;
+            width: 170px; height: 170px;
+            border: 2px solid rgba(139, 92, 246, 0.25);
+            border-radius: 16px;
+            animation: chipRotate 8s linear infinite reverse;
+        }
+        .chip-core-visual {
+            position: absolute;
+            top: 55px; left: 55px;
+            width: 110px; height: 110px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.12));
+            border: 2px solid rgba(59, 130, 246, 0.35);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            animation: chipCorePulse 2.5s ease-in-out infinite;
+        }
+        .chip-core-visual .core-dot {
+            width: 20px; height: 20px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 4px;
+            animation: coreDotPulse 1.5s ease-in-out infinite;
+        }
+        .chip-corner {
+            position: absolute;
+            width: 8px; height: 8px;
+            background: rgba(59, 130, 246, 0.4);
+            border-radius: 2px;
+        }
+        .chip-corner.tl { top: 16px; left: 16px; }
+        .chip-corner.tr { top: 16px; right: 16px; }
+        .chip-corner.bl { bottom: 16px; left: 16px; }
+        .chip-corner.br { bottom: 16px; right: 16px; }
+
+        @keyframes chipRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes chipCorePulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+            50% { box-shadow: 0 0 35px rgba(59, 130, 246, 0.4), 0 0 50px rgba(139, 92, 246, 0.2); }
+        }
+        @keyframes coreDotPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* ========== 数据统计 ========== */
+        .stats-banner {
+            background: linear-gradient(135deg, #0a0e1a, #060a14, #0a0e1a);
+            padding: 80px 80px;
+            position: relative; overflow: hidden;
+        }
+        .stats-banner::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px; max-width: 1000px; margin: 0 auto;
+            position: relative; z-index: 1;
+        }
+        .stat-item { text-align: center; }
+        .stat-item .stat-num {
+            font-size: 42px; font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block; line-height: 1;
+        }
+        .stat-item .stat-desc {
+            font-size: 14px; color: #8898b0;
+            margin-top: 12px; letter-spacing: 1px;
+        }
+
+        /* ========== 合作伙伴 ========== */
+        .partners { background: #05060a; }
+        .partners-grid {
+            display: flex; flex-wrap: wrap; gap: 16px;
+            justify-content: center; max-width: 1100px; margin: 0 auto;
+        }
+        .partner-item {
+            padding: 16px 28px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(59, 130, 246, 0.08);
+            border-radius: 10px;
+            font-size: 14px; color: #8898b0;
+            letter-spacing: 2px;
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .partner-item:hover {
+            border-color: rgba(59, 130, 246, 0.35);
+            color: #818cf8;
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-3px);
+        }
+
+        /* ========== 页脚 ========== */
+        .footer {
+            background: #040508;
+            padding: 60px 80px 30px;
+            border-top: 1px solid rgba(59, 130, 246, 0.08);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px; max-width: 1200px; margin: 0 auto 40px;
+        }
+        .footer-brand .f-logo {
+            font-size: 22px; font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px; letter-spacing: 2px;
+        }
+        .footer-brand p {
+            font-size: 13px; color: #6878a0; line-height: 1.8;
+        }
+        .footer-col h4 {
+            font-size: 15px; color: #fff;
+            margin-bottom: 20px; letter-spacing: 1px;
+        }
+        .footer-col a {
+            display: block; font-size: 13px;
+            color: #6878a0; text-decoration: none;
+            margin-bottom: 12px; transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+        .footer-col a:hover {
+            color: #818cf8; padding-left: 6px;
+        }
+        .footer-bottom {
+            text-align: center; padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 13px; color: #506090;
+            letter-spacing: 1px; max-width: 1200px; margin: 0 auto;
+        }
+        .footer-social {
+            display: flex; gap: 16px; margin-top: 16px;
+        }
+        .footer-social .social-dot {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; color: #6878a0;
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .footer-social .social-dot:hover {
+            border-color: #3b82f6; color: #818cf8;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 1024px) {
+            .navbar { padding: 16px 30px; }
+            .navbar.scrolled { padding: 10px 30px; }
+            .nav-links { display: none; }
+            section { padding: 70px 30px; }
+            .hero { padding: 100px 30px 60px; }
+            .hero-title { font-size: 36px; }
+            .services-grid { grid-template-columns: 1fr 1fr; }
+            .products-grid { grid-template-columns: 1fr; }
+            .about-content { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .hero-stats { gap: 30px; }
+        }
+        @media (max-width: 640px) {
+            .hero-title { font-size: 28px; }
+            .services-grid { grid-template-columns: 1fr; }
+            .product-card { flex-direction: column; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .hero-btns { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-logo">
+            <div class="logo-icon">
+                <div class="chip-logo">
+                    <div class="chip-core"></div>
+                    <div class="chip-pin top"></div>
+                    <div class="chip-pin bottom"></div>
+                    <div class="chip-pin left"></div>
+                    <div class="chip-pin right"></div>
+                </div>
+                <div class="logo-glow"></div>
+            </div>
+            <span class="logo-text">浩思凯嘉</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#home">首页</a></li>
+            <li><a href="#services">服务领域</a></li>
+            <li><a href="#products">产品中心</a></li>
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#partners">合作伙伴</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="pulse-rings">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">电子科技 · 智驱未来</div>
+            <h1 class="hero-title">
+                <span class="blue">浩瀚思域</span><span class="white">·</span><br>
+                <span class="blue">凯歌嘉誉</span><span class="white">驱动未来</span>
+            </h1>
+            <p class="hero-subtitle">
+                襄阳市浩思凯嘉电子科技有限公司坐落于历史文化名城襄阳<br>
+                "浩思"寓意浩瀚思维、深谋远虑，"凯嘉"象征凯旋佳绩、嘉誉四方<br>
+                专注电子科技领域，以智慧驱动创新，用科技点亮未来
+            </p>
+            <div class="hero-btns">
+                <a href="#services" class="btn-primary">了解服务</a>
+                <a href="#about" class="btn-outline">关于我们</a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="number">180+</span>
+                    <span class="label">服务客户</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">60+</span>
+                    <span class="label">技术团队</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">250+</span>
+                    <span class="label">成功项目</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">10+</span>
+                    <span class="label">行业经验</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 服务领域 -->
+    <section class="services" id="services">
+        <div class="section-title">
+            <div class="sub">Core Services</div>
+            <h2>核心服务领域</h2>
+            <div class="line"></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🔌</div>
+                <h3>电子产品研发</h3>
+                <p>提供智能硬件、嵌入式系统、物联网终端等电子产品研发设计服务，从方案设计到量产支持的一站式服务。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">💻</div>
+                <h3>软件开发服务</h3>
+                <p>提供企业级应用软件、管理系统、移动应用等定制开发服务，采用主流技术架构，满足各行业数字化需求。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔗</div>
+                <h3>系统集成服务</h3>
+                <p>提供软硬件一体化系统集成解决方案，打通数据与业务流程，实现企业信息系统高效协同与智能化管理。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📡</div>
+                <h3>物联网解决方案</h3>
+                <p>基于物联网技术，提供设备互联、数据采集、远程监控等智能物联方案，助力企业实现万物互联的智慧升级。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔒</div>
+                <h3>信息安全服务</h3>
+                <p>提供全面的信息安全解决方案，涵盖安全评估、渗透测试、安全加固等，保障企业核心信息资产安全。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🛠️</div>
+                <h3>技术运维支持</h3>
+                <p>提供全天候专业运维服务，涵盖系统监控、故障处理、性能优化等，确保业务系统持续高效稳定运行。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 产品中心 -->
+    <section class="products" id="products">
+        <div class="section-title">
+            <div class="sub">Products</div>
+            <h2>产品中心</h2>
+            <div class="line"></div>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="prod-icon">🖥️</div>
+                <div>
+                    <h3>智能电子终端设备</h3>
+                    <p>自主研发的智能终端产品线，涵盖工业控制、智能家居、智慧办公等场景，性能稳定、品质可靠。</p>
+                    <span class="tag">智能硬件</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="prod-icon">📊</div>
+                <div>
+                    <h3>企业数据管理平台</h3>
+                    <p>集数据采集、分析、展示于一体的企业级数据平台，支持多源数据接入与可视化大屏实时展示。</p>
+                    <span class="tag">数据平台</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="prod-icon">📱</div>
+                <div>
+                    <h3>智慧办公系统</h3>
+                    <p>融合即时通讯、流程审批、任务管理、视频会议等功能的一体化智慧办公平台，提升团队协作效率。</p>
+                    <span class="tag">办公协同</span>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="prod-icon">🌐</div>
+                <div>
+                    <h3>物联网管理平台</h3>
+                    <p>设备接入、远程管控、数据监控一体化的IoT平台，支持海量设备接入与实时数据流处理分析。</p>
+                    <span class="tag">IoT平台</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section class="about" id="about">
+        <div class="section-title">
+            <div class="sub">About Us</div>
+            <h2>关于我们</h2>
+            <div class="line"></div>
+        </div>
+        <div class="about-content">
+            <div class="about-text">
+                <h3>浩瀚思维 · 凯嘉品质</h3>
+                <p>
+                    襄阳市浩思凯嘉电子科技有限公司坐落于湖北省襄阳市，是一家专注于电子科技领域的创新型企业。
+                    公司名称"浩思凯嘉"蕴含着深厚的企业愿景——"浩思"代表浩瀚无垠的思维视野与深谋远虑的战略眼光，
+                    "凯嘉"象征凯旋佳绩与嘉誉四方。我们以电子科技为核心驱动力，秉承精益求精的工匠精神，
+                    致力于为客户提供高品质的电子产品与数字化解决方案，以智慧驱动创新，用科技创造价值。
+                </p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <div class="feat-icon">💡</div>
+                        <h4>创新驱动</h4>
+                        <p>持续研发投入，引领电子科技创新</p>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feat-icon">🏆</div>
+                        <h4>品质卓越</h4>
+                        <p>严格质量管理，打造凯嘉品质标杆</p>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feat-icon">🧠</div>
+                        <h4>智慧方案</h4>
+                        <p>深厚行业洞察，提供精准解决方案</p>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feat-icon">🤝</div>
+                        <h4>诚信合作</h4>
+                        <p>以诚为本，携手客户共创共赢</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-visual">
+                <div class="chip-visual">
+                    <div class="chip-outer"></div>
+                    <div class="chip-inner"></div>
+                    <div class="chip-core-visual">
+                        <div class="core-dot"></div>
+                    </div>
+                    <div class="chip-corner tl"></div>
+                    <div class="chip-corner tr"></div>
+                    <div class="chip-corner bl"></div>
+                    <div class="chip-corner br"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 数据统计 -->
+    <div class="stats-banner">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-num">180+</span>
+                <span class="stat-desc">服务企业客户</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">60+</span>
+                <span class="stat-desc">专业技术团队</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">250+</span>
+                <span class="stat-desc">累计成功项目</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">99.7%</span>
+                <span class="stat-desc">客户满意度</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 合作伙伴 -->
+    <section class="partners" id="partners">
+        <div class="section-title">
+            <div class="sub">Partners</div>
+            <h2>合作伙伴</h2>
+            <div class="line"></div>
+        </div>
+        <div class="partners-grid">
+            <div class="partner-item">华中科技大学</div>
+            <div class="partner-item">武汉理工大学</div>
+            <div class="partner-item">湖北文理学院</div>
+            <div class="partner-item">华为</div>
+            <div class="partner-item">中兴通讯</div>
+            <div class="partner-item">阿里云</div>
+            <div class="partner-item">腾讯云</div>
+            <div class="partner-item">百度智能云</div>
+            <div class="partner-item">京东科技</div>
+            <div class="partner-item">联想集团</div>
+            <div class="partner-item">烽火科技</div>
+            <div class="partner-item">中国信科</div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="f-logo">浩思凯嘉</div>
+                <p>襄阳市浩思凯嘉电子科技有限公司，坐落于湖北省襄阳市，专注于电子科技领域。"浩思"寓意浩瀚思维，"凯嘉"象征凯旋佳绩，致力于以科技创新驱动产业发展，为客户提供卓越的电子科技产品与解决方案。</p>
+                <div class="footer-social">
+                    <div class="social-dot">微</div>
+                    <div class="social-dot">博</div>
+                    <div class="social-dot">抖</div>
+                    <div class="social-dot">领</div>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>快速链接</h4>
+                <a href="#home">首页</a>
+                <a href="#services">服务领域</a>
+                <a href="#products">产品中心</a>
+                <a href="#about">关于我们</a>
+            </div>
+            <div class="footer-col">
+                <h4>服务领域</h4>
+                <a href="#">电子产品研发</a>
+                <a href="#">软件开发</a>
+                <a href="#">系统集成</a>
+                <a href="#">物联网方案</a>
+            </div>
+            <div class="footer-col">
+                <h4>联系方式</h4>
+                <a href="#">电话：联系我们</a>
+                <a href="#">邮箱：contact@hskaijia.com</a>
+                <a href="#">地址：湖北省襄阳市</a>
+                <a href="#">工作时间：周一至周五 9:00-18:00</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2024 襄阳市浩思凯嘉电子科技有限公司 | All Rights Reserved | 鄂ICP备XXXXXXXX号
+        </div>
+    </footer>
+
+    <script>
+        // 导航栏滚动
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // 生成电子粒子
+        const particlesContainer = document.getElementById('heroParticles');
+        for (let i = 0; i < 45; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.animationDuration = (Math.random() * 6 + 5) + 's';
+            particle.style.animationDelay = (Math.random() * 8) + 's';
+            const size = Math.random() * 3 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particlesContainer.appendChild(particle);
+        }
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
